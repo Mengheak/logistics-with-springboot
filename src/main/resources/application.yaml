@@ -1,3 +1,72 @@
 spring:
   application:
     name: logistics-apis
+  profiles:
+    default: dev
+  datasource:
+    url: jdbc:h2:mem:logistics;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  mvc:
+    problemdetails:
+      enabled: false
+
+server:
+  port: 8080
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+
+config:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:2a5f8d4c1b9e7a36c0d82f145b6e9073a4c1d85f2b7e93a60c4d18f5b2e7a93c6d0f41b85e27a93c6d1f4085b2e79a3c}
+      issuer: "logistics-apis"
+      access-token-minutes: 60
+      refresh-token-days: 14
+    cors:
+      allowed-origins:
+        - "http://localhost:4200"
+        - "http://localhost:3000"
+  pagination:
+    base-url: "http://localhost:8080/api/v1"
+    uri:
+      customer: "/customers"
+      warehouse: "/warehouses"
+      vehicle: "/vehicles"
+      driver: "/drivers"
+      shipment: "/shipments"
+      trip: "/trips"
+      user: "/users"
+      role: "/roles"
+  bootstrap:
+    seed-enabled: true
+    admin-email: "admin@logistics.local"
+    admin-password: "Admin@12345"
